@@ -48,11 +48,11 @@ print(df[,c("date", "percent_vnm", "percent_usa", "percent_sgp")])
 
 plot_case <- function(data, country_code, country,
                       color_col, color_line,
-                      t1, t2){
+                      t1, t2, output){
   
   plot_col <- paste0("cases_", country_code)
   
-  ggplot() +
+  df_plot <- ggplot() +
     geom_col( # layer for bar chart
       aes( # define columns for x, y axis
         x = data$date, # this is equivalent to covid_cases[["date"]]
@@ -75,11 +75,12 @@ plot_case <- function(data, country_code, country,
     scale_x_date(
       limits = c(t1, t2)) + 
     theme_classic()
+  ggsave(filename = output, df_plot, device = "pdf")
 }
 
 plot_case(data = df, country_code = "vnm", country = "Vietnam",
           color_col = "lightblue", color_line = "red",
-          t1 = first_report_date, t2 = last_report_date)
+          t1 = first_report_date, t2 = last_report_date, "plot.pdf")
 
 ### Task 4
 skimr::skim(df[,c("cases_chn", "cases_vnm", "cases_usa", "cases_sgp")])
